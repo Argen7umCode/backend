@@ -1,22 +1,19 @@
-from app import ALGORITHM, EXPIRATION_TIME, SECRET_KEY
-from utils.getters import UserGetter, ConversationGetter, MessageGetter
-from utils.creators import UserCreator, ConversationCreator, MessageCreator
-from utils.jwt import Verificator
+from routers import user_router, login_router, message_router, conversation_router
 
-from datetime import timedelta
+
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 
 
-SECRET_KEY = 'seckey12345'
-ALGORITHM = 'HS256'
-EXPIRATION_TIME = timedelta(minutes=3)
-
-user_getter, conversation_getter, message_getter = UserGetter(), ConversationGetter(), MessageGetter()
-user_creator, conversation_creator, message_creator = UserCreator(), ConversationCreator(), MessageCreator()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 app = FastAPI()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-verificator = Verificator(algorithm=ALGORITHM, 
-                          expiration_time=EXPIRATION_TIME, 
-                          secret_key=SECRET_KEY)
+
+app.include_router(user_router)
+app.include_router(login_router)
+app.include_router(message_router)
+app.include_router(conversation_router)
+
+@app.get('/')
+async def start():
+    return {'message' : 'Hello World'}

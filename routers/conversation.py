@@ -1,22 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from app import verificator
-from app import user_getter, conversation_getter, message_message
-from app import user_creator, conversation_creator, message_creator 
-
+from utils import conversation_creator, user_getter, conversation_getter, verificator
 from models.conversation import ConversationModel
 
 
-router = APIRouter()
+conversation_router = APIRouter()    
 
-
-@router.post('api/v1/conversation')
+@conversation_router.post('api/v1/conversation')
 async def create_conversation(user: str = Depends(verificator.verify_jwt)):
     if user: 
         db_conversation = ConversationModel(user_id= user.id)
         await conversation_creator.create(db_conversation)
         return db_conversation
 
-@router.get('api/v1/conversation/{id}')
+
+@conversation_router.get('api/v1/conversation/{id}')
 async def get_conversation_by_username(id: int = None, username: str = Depends(verificator.verify_jwt)):
     if username: 
         user = user_getter.get_by_username(username)

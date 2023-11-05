@@ -1,5 +1,3 @@
-from app import EXPIRATION_TIME, ALGORITHM, SECRET_KEY
-from app import oauth2_scheme
 from fastapi import Depends, HTTPException, status
 import jwt
 
@@ -16,7 +14,10 @@ class Verificator:
         data['exp'] = datetime.utcnow() + self.expiration_time
         return jwt.encode(data, self.secret_key, algorithm=self.algorithm)
 
-    def verify_jwt(self, token: str = Depends(oauth2_scheme)):
+    def verify_jwt(self, token: str = Depends(None)):
+        from app import oauth2_scheme
+        if token is None:
+            token = Depends(oauth2_scheme)
         try:
             return jwt.decode(token, self.secret_key, algorithms=[self.algorithm]).get('sub')
         except jwt.ExpiredSignatureError:
