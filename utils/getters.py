@@ -43,11 +43,14 @@ class MessageGetter(Getter):
         query = select(Message).where(Message.user_id == user.id)
         return await self.__get(query)
     
-    async def get_by_conversation(self, conversation: ConversationModel, limit: int = None):
+    async def get_by_conversation(self, conversation: ConversationModel):
         query = select(Message).where(Message.conversation_id == conversation.id)\
                                .order_by(Message.date)
-        if limit:
-            query = query.limit(limit)
         return await self.__get(query)
 
+    async def get_by_user_and_id(self, user: User, id: int):
+        query = select(Message).where(Message.id == id)\
+                               .where(Message.user_id == user.id)\
+                               .order_by(Message.date)
+        return await self.__get(query)
 
