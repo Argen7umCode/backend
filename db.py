@@ -25,3 +25,5 @@ class Session:
             yield session
 
 
+class SessionMixin(Session):
+    pass

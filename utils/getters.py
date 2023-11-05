@@ -1,35 +1,10 @@
-from abc import ABC, abstractmethod
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from models.user import User
 from models.conversation import ConversationModel
 from models.message import Message
-from db import Session
+from db import SessionMixin
 
-from typing import Any
 from sqlmodel import SQLModel
-
-class SessionMixin(Session):
-    pass
-
-
-class Creator(SessionMixin):
-
-    async def create(self, item: Any):
-        session = await self.get_session()
-        session.add(item)
-        await session.commit()
-        return item
-
-class ConversationCreator(Creator):
-    pass
-
-class MessageCreator(Creator):
-    pass
-
-class UserCreator(Creator):
-    pass
-
 
 
 class Getter(SessionMixin):
@@ -41,7 +16,6 @@ class Getter(SessionMixin):
     async def get_by_id(self, id: int, table: SQLModel):
         return await self.__get(select(table).get(id))
 
-
 class ConversationGetter(Getter):
 
     async def get_by_id(self, id: int):
@@ -50,7 +24,6 @@ class ConversationGetter(Getter):
     async def get_by_user(self, user: User):
         query = select(ConversationModel).where(ConversationModel.user_id == user.id)
         return await self.__get(query)
-
 
 class UserGetter(Getter):
 
@@ -70,8 +43,11 @@ class MessageGetter(Getter):
         query = select(Message).where(Message.user_id == user.id)
         return await self.__get(query)
     
-    async def get_by_conversation(self, conversation: ConversationModel):
-        query = select(Message).where(Message.conversation_id == conversation.id).order_by(Message.date)
+    async def get_by_conversation(self, conversation: ConversationModel, limit: int = None):
+        query = select(Message).where(Message.conversation_id == conversation.id)\
+                               .order_by(Message.date)
+        if limit:
+            query = query.limit(limit)
         return await self.__get(query)
 
 
