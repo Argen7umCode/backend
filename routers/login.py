@@ -1,4 +1,4 @@
-from models.db import get_session
+from db import get_session
 from utils.database import get_user_from_db
 from app import verificator
 from models.user import User
