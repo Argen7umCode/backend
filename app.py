@@ -1,3 +1,4 @@
+import uvicorn
 from routers import user_router, login_router, message_router, conversation_router
 
 
@@ -17,3 +18,7 @@ app.include_router(conversation_router)
 @app.get('/')
 async def start():
     return {'message' : 'Hello World'}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -14,7 +14,7 @@ class Verificator:
         data['exp'] = datetime.utcnow() + self.expiration_time
         return jwt.encode(data, self.secret_key, algorithm=self.algorithm)
 
-    def verify_jwt(self, token: str = Depends(None)):
+    def verify_jwt(self, token: str = None):
         from app import oauth2_scheme
         if token is None:
             token = Depends(oauth2_scheme)
