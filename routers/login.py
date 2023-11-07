@@ -1,4 +1,4 @@
-from models.user import User
+from models.models import User
 from utils import user_getter, verificator
 
 from fastapi import APIRouter, HTTPException, status

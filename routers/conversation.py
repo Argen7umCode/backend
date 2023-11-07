@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from utils import conversation_creator, user_getter, conversation_getter, verificator
-from models.conversation import ConversationModel
+from models.models import ConversationModel
 
 
 conversation_router = APIRouter()    

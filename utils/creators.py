@@ -8,6 +8,7 @@ class Creator(SessionMixin):
         session = await self.get_session()
         session.add(item)
         await session.commit()
+
         return item
 
 class ConversationCreator(Creator):
