@@ -6,7 +6,6 @@ class Creator(SessionMixin):
 
     async def create(self, item: Any):
         async with self.get_session() as session:
-            print(type(session))
             session.add(item)
             await session.commit()
         return item

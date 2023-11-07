@@ -8,16 +8,16 @@ from sqlmodel import SQLModel
 class Getter(SessionMixin):
 
     async def get(self, query):
-        session = await self.get_session().__anext__()
-        return (await session.execute(query)).fetchall()
+        async with self.get_session() as session:
+            return (await session.execute(query)).fetchall()
 
-    async def get_by_id(self, id: int, table: SQLModel):
-        return await self.get(select(table).get(id))
+    async def get_by_id_(self, id: int, table: SQLModel):
+        return await self.get(select(table).where(id == table.id))
 
 class ConversationGetter(Getter):
 
     async def get_by_id(self, id: int):
-        return await self.get_dy_id(id, ConversationModel)
+        return await self.get_by_id_(id, ConversationModel)
     
     async def get_by_user(self, user: User):
         query = select(ConversationModel).where(ConversationModel.user_id == user.id)
@@ -26,17 +26,16 @@ class ConversationGetter(Getter):
 class UserGetter(Getter):
 
     async def get_by_id(self, id: int):
-        return await self.get_dy_id(id, User)
+        return await self.get_by_id_(id, User)
     
     async def get_by_username(self, username: str):
-        print(dir(self))
         query = select(User).where(User.username == username)
         return await self.get(query)
     
 class MessageGetter(Getter):
 
     async def get_by_id(self, id: int):
-        return await self.get_dy_id(id, Message)    
+        return await self.get_by_id_(id, Message)    
 
     async def get_by_user(self, user: User):
         query = select(Message).where(Message.user_id == user.id)

@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException, status
-import jwt
+from jose import JWTError, jwt
 
 from datetime import timedelta, datetime
 
@@ -22,5 +22,6 @@ class Verificator:
             return jwt.decode(token, self.secret_key, algorithms=[self.algorithm]).get('sub')
         except jwt.ExpiredSignatureError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Expired Signature Error")
-        except jwt.PyJWKError:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token")
+        # except Exception as e:
+        #     print(e)
+        #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token")
