@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 import os
 
 from sqlmodel import SQLModel
@@ -15,8 +16,9 @@ async def init_db():
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
-class Session
+class Session:
     @staticmethod
+    @asynccontextmanager
     async def get_session() -> AsyncSession:
         async_session = sessionmaker(
             engine, class_=AsyncSession, expire_on_commit=False

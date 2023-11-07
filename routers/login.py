@@ -7,7 +7,6 @@ login_router = APIRouter()
 
 @login_router.post('/api/v1/login')
 async def login(username: str, password: str):
-    print("MUEE")
     db_user = await user_getter.get_by_username(username)
     if password == db_user.password:
         return {'access_token': verificator.create_jwt({'sub': db_user.id}), 

@@ -5,10 +5,10 @@ from typing import Any
 class Creator(SessionMixin):
 
     async def create(self, item: Any):
-        session = await self.get_session()
-        session.add(item)
-        await session.commit()
-
+        async with self.get_session() as session:
+            print(type(session))
+            session.add(item)
+            await session.commit()
         return item
 
 class ConversationCreator(Creator):
