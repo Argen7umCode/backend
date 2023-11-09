@@ -20,7 +20,9 @@ class ConversationGetter(Getter):
         return (await self.get_by_id_(id, ConversationModel))[::-1]
     
     async def get_by_user(self, user: User):
-        query = select(ConversationModel).join(Message).join(User).where(User == user)
+        query = select(ConversationModel).join(Message)\
+                                         .where(Message.user_id == user.id)\
+                                         .distinct()
         return (await self.get(query))[::-1]
 
 class UserGetter(Getter):
