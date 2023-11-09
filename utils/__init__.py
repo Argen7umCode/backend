@@ -10,7 +10,7 @@ user_creator, conversation_creator, message_creator = UserCreator(), Conversatio
 
 SECRET_KEY = 'seckey12345'
 ALGORITHM = 'HS256'
-EXPIRATION_TIME = timedelta(minutes=3)
+EXPIRATION_TIME = timedelta(minutes=300)
 
 verificator = Verificator(algorithm=ALGORITHM, 
                           expiration_time=EXPIRATION_TIME, 

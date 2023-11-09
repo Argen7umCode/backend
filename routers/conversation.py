@@ -14,12 +14,14 @@ async def create_conversation(user_id: int = Depends(verificator.verify_jwt)):
 
 
 @conversation_router.get(path='/api/v1/conversation/{id}')
-async def get_conversation_by_user_id(id: int = None, user_id: int = Depends(verificator.verify_jwt)):
+async def get_conversation_by_user_id(id: int, 
+                                      user_id: int = Depends(verificator.verify_jwt)):
     user = user_getter.get_by_id(user_id) 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     conversations = await conversation_getter.get_by_user(user)
+    print(conversations)
     if id is not None: 
         try:
             return conversations[id]
