@@ -1,4 +1,4 @@
-from pprint import pprint
+from chatbot.model import get_prediction()
 from utils import message_creator, user_getter, message_getter, conversation_getter, verificator
 from models.models import ConversationModel,Message
 
@@ -33,6 +33,7 @@ async def get_messages_by_conversation_id(conversation_id: int, limit: int = Non
     if user_id in users_ids:
         return messages[:limit]
     else:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, 'No messages were found by conversation_id for this user')
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, 
+                            'No messages were found by conversation_id for this user')
 
 
